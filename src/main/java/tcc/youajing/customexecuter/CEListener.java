@@ -1,9 +1,13 @@
 package tcc.youajing.customexecuter;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import io.papermc.lib.PaperLib;
 import org.bukkit.inventory.ItemStack;
@@ -23,10 +27,10 @@ public class CEListener implements org.bukkit.event.Listener {
             //魔镜magic_mirror12700010
             if (event.getItem().getItemMeta().getCustomModelData() == 12700010) {
                 Player player = event.getPlayer();
+                event.setCancelled(true);
                 // 使用PaperLib API 异步获取床位置
                 PaperLib.getBedSpawnLocationAsync(player, true).thenAccept(location -> {
                     if (location != null) {
-                        event.setCancelled(true);
                         player.sendMessage(miniMessage.deserialize("<gradient:#8A2BE2:#00BFFF>一阵神秘的光芒后...</gradient>"));
                         plugin.getPlatform().teleportPlayer(player, location);
                     } else {
@@ -46,6 +50,7 @@ public class CEListener implements org.bukkit.event.Listener {
                         player.sendMessage(miniMessage.deserialize("<gradient:#89f7fe:#66a6ff>带你回到那个地方...</gradient>"));
                         plugin.getPlatform().teleportPlayer(player, location);
                     } else {
+                        event.setCancelled(true);
                         player.sendMessage(miniMessage.deserialize("<red>你还没有设置床（床是不是被挖了？？）!</red>"));
                     }
                 });
